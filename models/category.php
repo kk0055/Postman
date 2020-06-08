@@ -62,6 +62,89 @@ $this->id = $row['id'];
 $this->name = $row['name'];
   
   }
-  
 
+//Create category
+public function create() {
+  $query = 'INSERT INTO ' .
+  $this->table . '
+  SET
+  name =:name';
+
+  //Prepare statement
+  $stmt = $this->conn->prepare($query);
+ 
+  //Clean data
+  $this->name = htmlspecialchars(strip_tags($this->name));
+
+  //Bind
+  $stmt->bindParam(':name' , $this->name);
+
+  //Execute
+  if($stmt->execute()) {
+    return true;
+  }
+
+  //Error
+  printf("Error: $s.\n",$stmt->error);
+
+  return false;
+
+} 
+
+//Update cate
+public function update() {
+  //query作成
+  $query = 'UPDATE ' .
+  $this->table . '
+  SET
+  name = :name
+  WHERE id =:id  ';
+
+  //Prepare statement
+  $stmt = $this->conn->prepare($query);
+
+    // Clean data
+    $this->name = htmlspecialchars(strip_tags($this->name));
+    $this->id = htmlspecialchars(strip_tags($this->id));
+  // Bind data
+  $stmt-> bindParam(':name', $this->name);
+  $stmt-> bindParam(':id', $this->id);
+
+  // Execute query
+  if($stmt->execute()) {
+    return true;
+  }
+
+  // Print error if something goes wrong
+  printf("Error: $s.\n", $stmt->error);
+
+  return false;
+  }
+
+  //Delete category
+  public function delete() {
+    //Query
+    $query = 'DELETE FROM' 
+    .$this->table . '
+    WHERE id = :id';
+
+     //Prepare statement
+  $stmt = $this->conn->prepare($query);
+    // clean data
+    $this->id = htmlspecialchars(strip_tags($this->id));
+
+    //Bind data
+    $stmt->bindParam(':id', $this->id);
+
+    //Execute
+    if($stmt->execute()) {
+      return true;
+    }
+
+    // Print error if something goes wrong
+    printf("Error: $s.\n", $stmt->error);
+
+    return false;
+    
+  }
 }
